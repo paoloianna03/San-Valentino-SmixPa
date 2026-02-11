@@ -5,28 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Una domanda importante...</title>
     <style>
-        /* --- CURSORE: FORZATURA ESTREMA --- */
-        /* Definiamo il cursore come variabile per riutilizzarlo facilmente */
-        :root {
-            --cursor-url: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="red" stroke-width="2"/><circle cx="16" cy="16" r="8" fill="none" stroke="red" stroke-width="2"/><line x1="16" y1="0" x2="16" y2="32" stroke="red" stroke-width="1"/><line x1="0" y1="16" x2="32" y2="16" stroke="red" stroke-width="1"/></svg>');
-        }
-
-        /* Applichiamo il cursore a TUTTI gli elementi specifici possibili */
-        html, body, div, span, h1, button, svg, path, .heart-btn, #btn-yes, #btn-no, #btn-abstain {
-            cursor: var(--cursor-url) 16 16, crosshair !important;
-        }
-
-        /* --- Impostazioni Generali --- */
+        /* --- Impostazioni Generali e Cursore --- */
         body {
             margin: 0;
             padding: 0;
-            background-color: #ffc0cb;
+            background-color: #ffc0cb; /* Sfondo rosa */
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
             font-family: 'Arial', sans-serif;
+            /* Cursore personalizzato a mirino (cerchi concentrici) */
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="red" stroke-width="2"/><circle cx="16" cy="16" r="8" fill="none" stroke="red" stroke-width="2"/><line x1="16" y1="0" x2="16" y2="32" stroke="red" stroke-width="1"/><line x1="0" y1="16" x2="32" y2="16" stroke="red" stroke-width="1"/></svg>') 16 16, crosshair;
         }
 
         /* --- Effetto Busta da Lettera --- */
@@ -39,6 +30,7 @@
             pointer-events: none;
             z-index: -1;
         }
+
         .envelope-overlay::before,
         .envelope-overlay::after {
             content: '';
@@ -46,14 +38,16 @@
             top: 0;
             width: 60%;
             height: 100vh;
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.2); /* Leggera trasparenza per simulare la carta */
             border-bottom: 2px solid #ff9eb5;
         }
+
         .envelope-overlay::before {
             left: 0;
             transform-origin: top left;
             transform: skewY(-20deg);
         }
+
         .envelope-overlay::after {
             right: 0;
             transform-origin: top right;
@@ -78,21 +72,22 @@
             font-size: 2.5rem;
             margin-bottom: 50px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            user-select: none; /* Impedisce la selezione del testo */
         }
 
-        /* --- Area Pulsanti Centrali --- */
+        /* --- Area Pulsanti Centrali (Sì/No) --- */
         .buttons-container {
             display: flex;
             gap: 50px;
             justify-content: center;
             align-items: center;
-            height: 150px;
+            height: 150px; /* Altezza fissa per gestire lo swap */
         }
 
+        /* Stile base per i pulsanti cuore */
         .heart-btn {
             background: none;
             border: none;
+            cursor: pointer;
             transition: transform 0.2s;
             display: flex;
             flex-direction: column;
@@ -104,12 +99,8 @@
             width: 100px;
             height: 100px;
         }
-
-        .heart-btn:hover, #btn-abstain:hover {
-            transform: scale(1.1);
-        }
         
-        /* Cuore SÌ */
+        /* CSS per il cuore intero (Sì) */
         .heart-shape {
             position: absolute;
             top: 0;
@@ -134,7 +125,7 @@
 
         #btn-yes span { z-index: 1; position: relative; top: 25px;}
 
-        /* Cuore NO */
+        /* Stile per il cuore spezzato (No) - Uso SVG per facilità */
         #btn-no {
             width: 110px;
             height: 110px;
@@ -142,7 +133,7 @@
         .broken-heart-svg {
             width: 100%;
             height: 100%;
-            fill: #555;
+            fill: #555; /* Colore grigio spento */
         }
         #btn-no span {
             position: absolute;
@@ -152,7 +143,7 @@
             color: white;
         }
 
-        /* Pulsante Astengo */
+        /* --- Pulsante Astensione --- */
         #btn-abstain {
             position: absolute;
             bottom: 30px;
@@ -162,24 +153,25 @@
             border: 2px solid #ccc;
             color: #333;
             border-radius: 8px;
-            transition: all 0.1s ease;
+            cursor: pointer;
+            transition: all 0.1s ease; /* Movimento veloce */
         }
 
-        /* --- Frecce d'oro (clic) --- */
+        /* --- Freccia d'oro al click --- */
         .golden-arrow {
             position: absolute;
             pointer-events: none;
             width: 60px;
             height: 10px;
-            background: linear-gradient(to right, #ffd700, #b8860b);
+            background: linear-gradient(to right, #ffd700, #b8860b); /* Oro */
             clip-path: polygon(0 40%, 70% 40%, 70% 0, 100% 50%, 70% 100%, 70% 60%, 0 60%);
             box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
             z-index: 100;
         }
 
-        /* --- Schermata Finale --- */
+        /* --- Schermata Finale (Successo) --- */
         #final-container {
-            display: none;
+            display: none; /* Nascosto inizialmente */
             position: fixed;
             top: 0;
             left: 0;
@@ -188,16 +180,15 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            background-color: #ffc0cb;
+            background-color: #ffc0cb; /* Mantiene lo sfondo */
             opacity: 0;
             transition: opacity 1s ease;
-            z-index: 200; /* Sopra a tutto */
         }
 
         .cupid-heart-container {
             position: relative;
-            width: 350px; /* Leggermente più grande */
-            height: 350px;
+            width: 300px;
+            height: 300px;
             animation: heartbeat 1.5s infinite;
         }
 
@@ -207,33 +198,21 @@
             left: 50%;
             transform: translate(-50%, -50%);
             color: white;
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: bold;
             text-align: center;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
-            width: 100%;
-            z-index: 10;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+            width: 80%;
         }
         
-        /* SVG Finale */
+        /* SVG per il cuore finale */
         .cupid-svg {
             width: 100%;
             height: 100%;
-            overflow: visible; /* Fondamentale */
+            overflow: visible;
         }
         .cupid-heart-path { fill: #e91e63; }
-        
-        /* Stile della freccia finale */
-        .cupid-arrow-shaft {
-            fill: none;
-            stroke: #ffd700;
-            stroke-width: 8;
-            stroke-linecap: square; /* Estremità piatte per evitare punte storte */
-        }
-        .cupid-arrow-head {
-            fill: #ffd700;
-            stroke: none;
-        }
+        .cupid-arrow-path { fill: none; stroke: #ffd700; stroke-width: 8; stroke-linecap: round; }
 
         @keyframes heartbeat {
             0% { transform: scale(1); }
@@ -262,8 +241,7 @@
             <button id="btn-no" class="heart-btn">
                  <svg class="broken-heart-svg" viewBox="0 0 24 24">
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                    <path d="M12 6v12" stroke="#ffc0cb" stroke-width="2"/>
-                </svg>
+                    <path d="M12 6v12" stroke="#ffc0cb" stroke-width="2"/> </svg>
                 <span>No</span>
             </button>
         </div>
@@ -275,12 +253,7 @@
         <div class="cupid-heart-container">
              <svg class="cupid-svg" viewBox="0 0 100 100">
                 <path class="cupid-heart-path" d="M50 90 C 10 70, 0 40, 25 20 C 40 5, 50 20, 50 20 C 50 20, 60 5, 75 20 C 100 40, 90 70, 50 90 Z" />
-                
-                <line x1="-50" y1="130" x2="140" y2="-22" class="cupid-arrow-shaft" />
-                
-                <path class="cupid-arrow-head" d="M 140 -22 L 120 -15 L 128 0 Z" />
-                
-                <path class="cupid-arrow-shaft" d="M -50 130 L -60 128 M -50 130 L -45 145" stroke-width="4" />
+                <path class="cupid-arrow-path" d="M 10 80 L 90 20 M 80 15 L 90 20 L 85 30"/>
             </svg>
             <div class="final-text">Ti Amo una Smita</div>
         </div>
@@ -297,7 +270,7 @@
 
         let isSwapped = false;
 
-        // Swap
+        // --- Logica Pulsante NO (Inversione) ---
         function swapButtons() {
             if (isSwapped) {
                 buttonsContainer.insertBefore(btnYes, btnNo);
@@ -306,50 +279,70 @@
             }
             isSwapped = !isSwapped;
         }
+
+        // Applica lo swap quando il mouse entra nel pulsante NO
         btnNo.addEventListener('mouseenter', swapButtons);
 
-        // Fuga Astengo
+
+        // --- Logica Pulsante MI ASTENGO (Fuga) ---
         btnAbstain.addEventListener('mouseenter', function() {
+            // Calcola nuove coordinate random all'interno della finestra
+            // Sottraiamo la dimensione del pulsante per evitare che esca dallo schermo
             const maxX = window.innerWidth - this.offsetWidth - 20;
             const maxY = window.innerHeight - this.offsetHeight - 20;
+
             const newX = Math.random() * maxX;
             const newY = Math.random() * maxY;
 
             this.style.position = 'absolute';
             this.style.left = newX + 'px';
             this.style.top = newY + 'px';
+            // Rimuovi il posizionamento bottom iniziale
             this.style.bottom = 'auto';
         });
 
-        // Click Mirino (Genera frecce)
+
+        // --- Logica Click Freccia d'Oro ---
         document.addEventListener('click', function(e) {
-            // Evita di sparare se si clicca sui pulsanti o se siamo alla fine
-            if (e.target.closest('button') || finalContainer.style.display === 'flex') return;
+            // Non creare la freccia se si clicca sul pulsante Sì finale
+            if (e.target.closest('#btn-yes') || finalContainer.style.display === 'flex') return;
 
             const arrow = document.createElement('div');
             arrow.classList.add('golden-arrow');
-            arrow.style.left = (e.clientX - 30) + 'px';
-            arrow.style.top = (e.clientY - 5) + 'px';
-            const randomAngle = (Math.random() * 60) - 30;
+            
+            // Posiziona la freccia dove si è cliccato
+            arrow.style.left = (e.clientX - 30) + 'px'; // -30 per centrare orizzontalmente
+            arrow.style.top = (e.clientY - 5) + 'px';  // -5 per centrare verticalmente
+
+            // Rotazione casuale per realismo
+            const randomAngle = (Math.random() * 60) - 30; // Tra -30 e +30 gradi
             arrow.style.transform = `rotate(${randomAngle}deg)`;
+            
             document.body.appendChild(arrow);
         });
 
-        // Finale
+
+        // --- Logica Finale (Click su SÌ) ---
         btnYes.addEventListener('click', function() {
+            // 1. Nascondi l'interfaccia principale
             mainContainer.style.opacity = '0';
             
-            // Rimuove freccette sparse
+            // Rimuovi le frecce piantate
             document.querySelectorAll('.golden-arrow').forEach(el => el.remove());
 
             setTimeout(() => {
                 mainContainer.style.display = 'none';
+                
+                // 2. Mostra il contenitore finale
                 finalContainer.style.display = 'flex';
+                // Piccolo ritardo per permettere il display:flex prima dell'opacità
                 setTimeout(() => {
                     finalContainer.style.opacity = '1';
                 }, 50);
-            }, 500);
+
+            }, 500); // Aspetta che la transizione di opacità finisca
         });
+
     </script>
 </body>
 </html>

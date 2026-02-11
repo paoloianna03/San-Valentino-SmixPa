@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Una domanda importante...</title>
     <style>
-        /* --- CURSORE: FORZATURA ESTREMA SU TUTTI GLI ELEMENTI --- */
+        /* --- CURSORE: FORZATURA ESTREMA --- */
         :root {
+            /* Cursore SVG codificato */
             --cursor-url: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="red" stroke-width="2"/><circle cx="16" cy="16" r="8" fill="none" stroke="red" stroke-width="2"/><line x1="16" y1="0" x2="16" y2="32" stroke="red" stroke-width="1"/><line x1="0" y1="16" x2="32" y2="16" stroke="red" stroke-width="1"/></svg>');
         }
 
-        /* Applica il mirino a QUALSIASI cosa, inclusi bottoni e testi */
+        /* Applica il mirino a QUALSIASI cosa */
         *, html, body, button, h1, div, span, svg, path {
             cursor: var(--cursor-url) 16 16, crosshair !important;
         }
@@ -19,7 +20,7 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #ffc0cb;
+            background-color: #ffc0cb; /* Sfondo Rosa */
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -48,16 +49,8 @@
             background-color: rgba(255, 255, 255, 0.2);
             border-bottom: 2px solid #ff9eb5;
         }
-        .envelope-overlay::before {
-            left: 0;
-            transform-origin: top left;
-            transform: skewY(-20deg);
-        }
-        .envelope-overlay::after {
-            right: 0;
-            transform-origin: top right;
-            transform: skewY(20deg);
-        }
+        .envelope-overlay::before { left: 0; transform-origin: top left; transform: skewY(-20deg); }
+        .envelope-overlay::after { right: 0; transform-origin: top right; transform: skewY(20deg); }
 
         /* --- Contenitore Principale --- */
         #main-container {
@@ -103,27 +96,20 @@
             width: 100px;
             height: 100px;
         }
-        .heart-btn:hover, #btn-abstain:hover {
-            transform: scale(1.1);
-        }
+        .heart-btn:hover, #btn-abstain:hover { transform: scale(1.1); }
         
         /* Cuore SÌ */
         .heart-shape {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background-color: #e91e63;
             transform: rotate(-45deg);
             z-index: -1;
         }
-        .heart-shape::before,
-        .heart-shape::after {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 100%;
+        .heart-shape::before, .heart-shape::after {
+            content: ""; position: absolute;
+            width: 100%; height: 100%;
             background-color: #e91e63;
             border-radius: 50%;
         }
@@ -131,20 +117,18 @@
         .heart-shape::after { top: 0; left: 50%; }
         #btn-yes span { z-index: 1; position: relative; top: 25px;}
 
-        /* Cuore NO */
+        /* Cuore NO (Aggiornato) */
         #btn-no { width: 110px; height: 110px; }
         .broken-heart-svg { width: 100%; height: 100%; fill: #555; }
         #btn-no span {
-            position: absolute;
-            top: 50%; left: 50%;
+            position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             color: white;
         }
 
         /* Pulsante Astengo */
         #btn-abstain {
-            position: absolute;
-            bottom: 30px;
+            position: absolute; bottom: 30px;
             padding: 15px 30px;
             font-size: 1.2rem;
             background-color: #f0f0f0;
@@ -158,8 +142,7 @@
         .golden-arrow {
             position: absolute;
             pointer-events: none;
-            width: 60px;
-            height: 10px;
+            width: 60px; height: 10px;
             background: linear-gradient(to right, #ffd700, #b8860b);
             clip-path: polygon(0 40%, 70% 40%, 70% 0, 100% 50%, 70% 100%, 70% 60%, 0 60%);
             box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
@@ -169,13 +152,9 @@
         /* --- Schermata Finale --- */
         #final-container {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            justify-content: center;
-            align-items: center;
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            justify-content: center; align-items: center;
             flex-direction: column;
             background-color: #ffc0cb;
             opacity: 0;
@@ -185,31 +164,19 @@
 
         .cupid-heart-container {
             position: relative;
-            width: 350px;
-            height: 350px;
+            width: 350px; height: 350px;
             animation: heartbeat 1.5s infinite;
         }
 
         .final-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
+            position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            color: white;
-            font-size: 2rem;
-            font-weight: bold;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
-            width: 100%;
-            z-index: 10;
+            color: white; font-size: 2rem; font-weight: bold;
+            text-align: center; text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+            width: 100%; z-index: 10;
         }
         
-        /* SVG Finale */
-        .cupid-svg {
-            width: 100%;
-            height: 100%;
-            overflow: visible;
-        }
+        .cupid-svg { width: 100%; height: 100%; overflow: visible; }
         .cupid-heart-path { fill: #e91e63; }
         
         @keyframes heartbeat {
@@ -239,7 +206,13 @@
             <button id="btn-no" class="heart-btn">
                  <svg class="broken-heart-svg" viewBox="0 0 24 24">
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                    <path d="M12 6v12" stroke="#ffc0cb" stroke-width="2"/>
+                    
+                    <path d="M12 4 L 10.5 8 L 13.5 12 L 10.5 16 L 12 21" 
+                          stroke="#ffc0cb" 
+                          stroke-width="2.5" 
+                          fill="none" 
+                          stroke-linecap="round" 
+                          stroke-linejoin="round"/>
                 </svg>
                 <span>No</span>
             </button>
@@ -255,9 +228,7 @@
                 
                 <g transform="rotate(-45, 50, 50)">
                     <line x1="-10" y1="50" x2="110" y2="50" stroke="#ffd700" stroke-width="6" stroke-linecap="butt" />
-                    
                     <polygon points="125,50 105,40 105,60" fill="#ffd700" />
-                    
                     <polyline points="-5,40 -10,50 -5,60" fill="none" stroke="#ffd700" stroke-width="4" stroke-linecap="round"/>
                     <polyline points="5,40 0,50 5,60" fill="none" stroke="#ffd700" stroke-width="4" stroke-linecap="round"/>
                 </g>
@@ -266,7 +237,6 @@
         </div>
     </div>
 
-
     <script>
         const btnYes = document.getElementById('btn-yes');
         const btnNo = document.getElementById('btn-no');
@@ -274,6 +244,26 @@
         const buttonsContainer = document.getElementById('btns-central');
         const mainContainer = document.getElementById('main-container');
         const finalContainer = document.getElementById('final-container');
+
+        // --- SISTEMA AUDIO ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioContext();
+
+        function playArrowSound() {
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.type = 'triangle';
+            const now = audioCtx.currentTime;
+            oscillator.frequency.setValueAtTime(600, now);
+            oscillator.frequency.exponentialRampToValueAtTime(100, now + 0.3);
+            gainNode.gain.setValueAtTime(0.1, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+            oscillator.start(now);
+            oscillator.stop(now + 0.3);
+        }
 
         let isSwapped = false;
 
@@ -292,16 +282,16 @@
             const maxY = window.innerHeight - this.offsetHeight - 20;
             const newX = Math.random() * maxX;
             const newY = Math.random() * maxY;
-
             this.style.position = 'absolute';
             this.style.left = newX + 'px';
             this.style.top = newY + 'px';
             this.style.bottom = 'auto';
         });
 
+        // Click Mirino
         document.addEventListener('click', function(e) {
             if (e.target.closest('button') || finalContainer.style.display === 'flex') return;
-
+            playArrowSound();
             const arrow = document.createElement('div');
             arrow.classList.add('golden-arrow');
             arrow.style.left = (e.clientX - 30) + 'px';

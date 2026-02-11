@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Per il mio San Valentino</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #ffc0cb; /* Rosa */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden;
+            cursor: none; /* Nascondiamo il cursore default */
+            user-select: none;
+        }
+
+        /* Cursore Mirino */
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #ff4d4d;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: transform 0.1s;
+        }
+        #custom-cursor::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background: #ff4d4d;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #custom-cursor::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ff4d4d;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Contenitore Principale */
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #d32f2f;
+            font-family: 'Pacifico', cursive;
+            font-size: 3rem;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.5);
+            padding: 0 20px;
+        }
+
+        .buttons-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            width: auto;
+            margin-bottom: 40px;
+        }
+
+        /* Stile Pulsanti Cuore */
+        .btn-heart {
+            background: none;
+            border: none;
+            cursor: none; 
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #d32f2f;
+            font-family: 'Pacifico', cursive;
+            font-size: 1.5rem;
+        }
+
+        .btn-heart svg {
+            width: 100px;
+            height: 100px;
+            filter: drop-shadow(3px 3px 0px rgba(0,0,0,0.1));
+            transition: transform 0.2s;
+        }
+
+        .btn-heart:hover svg {
+            transform: scale(1.1);
+        }
+
+        /* Stile Pulsante Mi Astengo */
+        .btn-abstain {
+            background-color: #fff0f3;
+            border: 2px solid #d32f2f;
+            color: #d32f2f;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: bold;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: none;
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+            position: relative; /* Diventerà fixed quando si muove */
+            transition: all 0.3s ease-out; /* Movimento fluido */
+            z-index: 20; /* Deve stare sopra */
+        }
+
+        /* SVG Colors */
+        .heart-shape { fill: #ff0000; }
+        .broken-shape { fill: #555; }
+
+        /* Freccia che si pianta (Stile Cupido Rosa) */
+        .arrow-shot {
+            position: absolute;
+            width: 60px;
+            pointer-events: none;
+            z-index: 5;
+            /* Animazione di entrata e dissolvenza */
+            animation: stickAndFade 2s forwards ease-out;
+        }
+
+        @keyframes stickAndFade {
+            0% { transform: scale(0.5) rotate(var(--angle)); opacity: 0.8; }
+            10% { transform: scale(1) rotate(var(--angle)); opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; transform: scale(1) rotate(var(--angle)) translate(10px, 10px); }
+        }
+
+
+        /* Schermata Finale */
+        #end-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 1s forwards;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #ffc0cb; /* Assicura sfondo coprente */
+            z-index: 100;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        /* Stile per il testo SVG centrale */
+        .svg-text {
+            font-family: 'Pacifico', cursive;
+            font-size: 24px;
+            fill: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <audio id="arrow-sound" src="https://github.com/rafaelcastrocouto/audio/raw/master/bow-release.mp3" preload="auto"></audio>
+
+    <div id="custom-cursor"></div>
+
+    <div class="container" id="main-screen">
+        <h1>Sarai il mio San Valentino anche quest'anno?</h1>
+        
+        <div class="buttons-wrapper" id="heart-btn-container">
+            <button class="btn-heart" id="yesBtn">
+                <svg viewBox="0 0 32 29.6" class="heart-shape">
+                    <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
+                    c6.1-9.3,16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+                </svg>
+                <span>Sì</span>
+            </button>
+
+            <button class="btn-heart" id="noBtn">
+                <svg viewBox="0 0 32 29.6" class="broken-shape">
+                    <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,2.3,0.6,4.4,1.6,6.2L6,19l3-2l2,4l3-6
+                    l2,5l2,8l4,6c2.4-3.1,4-6.2,4-9.6C32,3.8,28.2,0,23.6,0z"/>
+                </svg>
+                <span>No</span>
+            </button>
+        </div>
+
+        <button class="btn-abstain" id="abstainBtn">Mi astengo</button>
+    </div>
+
+    <div id="end-screen">
+        <svg viewBox="0 0 200 200" style="width: 90vw; max-width: 500px; height: auto; overflow: visible;">
+            <defs>
+                <filter id="shadow">
+                    <feDropShadow dx="3" dy="3" stdDeviation="3" flood-opacity="0.3"/>
+                </filter>
+                <linearGradient id="arrowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ff8fa3;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#d32f2f;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            
+            <g filter="url(#shadow)">
+                <path d="M-30,150 L50,70" stroke="url(#arrowGradient)" stroke-width="6" marker-start="url(#featherSVG)"/>
+                 <path d="M150,-30 L180,-60" stroke="url(#arrowGradient)" stroke-width="6" marker-end="url(#arrowheadSVG)"/>
+
+                <path d="M100,180 C20,120 -20,70 30,30 C60,0 100,50 100,50 C100,50 140,0 170,30 C220,70 180,120 100,180 Z" fill="#ff0000"/>
+                
+                <text x="100" y="95" text-anchor="middle" dominant-baseline="middle" class="svg-text">
+                    <tspan x="100" dy="0">Ti Amo una</tspan>
+                    <tspan x="100" dy="30">Smita</tspan>
+                </text>
+            </g>
+            
+            <marker id="arrowheadSVG" markerWidth="12" markerHeight="12" refX="0" refY="6" orient="auto">
+                <path d="M0,0 L0,12 L12,6 z" fill="#d32f2f" />
+            </marker>
+            <marker id="featherSVG" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto">
+                 <path d="M14,0 L0,7 L14,14 M12,2 L2,7 L12,12" fill="none" stroke="#ff8fa3" stroke-width="2"/>
+            </marker>
+        </svg>
+    </div>
+
+    <script>
+        // --- Setup Audio ---
+        const arrowSound = document.getElementById('arrow-sound');
+        // Abbassiamo un po' il volume
+        arrowSound.volume = 0.4;
+
+        function playSound() {
+            // Clona il nodo audio per poter sovrapporre i suoni se si clicca velocemente
+            let soundClone = arrowSound.cloneNode();
+            soundClone.play().catch(e => console.log("Audio play failed (user interaction needed first):", e));
+        }
+
+
+        // --- Logica Cursore ---
+        const cursor = document.getElementById('custom-cursor');
+        let mouseX = 0, mouseY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursor.style.left = mouseX + 'px';
+            cursor.style.top = mouseY + 'px';
+        });
+
+
+        // --- Logica Freccia che si pianta (Click) ---
+        document.addEventListener('mousedown', (e) => {
+            // Suona l'effetto sonoro
+            playSound();
+            createCupidArrow(e.clientX, e.clientY);
+        });
+
+        function createCupidArrow(x, y) {
+            const arrow = document.createElement('div');
+            arrow.classList.add('arrow-shot');
+            
+            // Calcola un angolo casuale per la rotazione
+            const randomAngle = (Math.random() * 60) - 30; 
+            arrow.style.setProperty('--angle', `${randomAngle}deg`);
+
+            // SVG Freccia Cupido Rosa
+            arrow.innerHTML = `
+                <svg viewBox="0 0 60 20" style="drop-shadow(2px 2px 2px rgba(0,0,0,0.2));">
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#ffb6c1;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#ff69b4;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <line x1="5" y1="10" x2="45" y2="10" stroke="url(#grad1)" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M45,10 L35,4 L58,10 L35,16 Z" fill="#ff69b4" />
+                    <path d="M5,10 L-2,3 M5,10 L-2,17 M12,10 L5,3 M12,10 L5,17" stroke="#ff69b4" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            `;
+            
+            // Posiziona la punta sotto il mirino
+            arrow.style.left = (x - 50) + 'px'; 
+            arrow.style.top = (y - 10) + 'px';
+            
+            document.body.appendChild(arrow);
+            
+            // Rimuovi l'elemento dal DOM dopo che l'animazione di dissolvenza è finita (2 secondi)
+            setTimeout(() => {
+                arrow.remove();
+            }, 2000);
+        }
+
+
+        // --- Logica Pulsanti Cuore (Lo Scambio) ---
+        const noBtn = document.getElementById('noBtn');
+        const heartBtnContainer = document.getElementById('heart-btn-container');
+        let isReversed = false;
+
+        noBtn.addEventListener('mouseenter', () => {
+            if (!isReversed) {
+                heartBtnContainer.style.flexDirection = 'row-reverse';
+                isReversed = true;
+            } else {
+                heartBtnContainer.style.flexDirection = 'row';
+                isReversed = false;
+            }
+        });
+
+
+        // --- Logica Pulsante "Mi astengo" (Scappa) ---
+        const abstainBtn = document.getElementById('abstainBtn');
+
+        abstainBtn.addEventListener('mouseenter', moveAbstainButton);
+
+        function moveAbstainButton() {
+            // Calcola nuove coordinate casuali all'interno della finestra
+            // Sottraiamo la larghezza/altezza del pulsante per evitare che esca dallo schermo
+            const maxX = window.innerWidth - abstainBtn.offsetWidth - 20;
+            const maxY = window.innerHeight - abstainBtn.offsetHeight - 20;
+
+            const newX = Math.max(20, Math.random() * maxX);
+            const newY = Math.max(20, Math.random() * maxY);
+
+            // Imposta la posizione su fixed per muoverlo liberamente
+            abstainBtn.style.position = 'fixed';
+            abstainBtn.style.left = newX + 'px';
+            abstainBtn.style.top = newY + 'px';
+        }
+
+
+        // --- Logica Finale (Click su Sì) ---
+        const yesBtn = document.getElementById('yesBtn');
+        const mainScreen = document.getElementById('main-screen');
+        const endScreen = document.getElementById('end-screen');
+
+        yesBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Evita di sparare un'altra freccia piccola
+            
+            // Suono finale trionfale (opzionale, riusa lo stesso per ora)
+             playSound();
+
+            // Nascondi la schermata principale e il cursore
+            mainScreen.style.display = 'none';
+            cursor.style.display = 'none';
+            document.body.style.cursor = 'default'; // Ripristina cursore normale se serve
+            
+            // Mostra la schermata finale
+            endScreen.style.display = 'flex';
+        });
+
+    </script>
+</body>
+</html>

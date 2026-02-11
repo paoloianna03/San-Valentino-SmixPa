@@ -148,34 +148,37 @@
         }
 
 
-        /* Schermata Finale */
+     /* Schermata Finale */
         #end-screen {
             display: none;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             animation: fadeIn 1s forwards;
-            width: 100%;
-            height: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background-color: #ffc0cb; /* Assicura sfondo coprente */
-            z-index: 100;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
+            from { opacity: 0; transform: scale(0.8); }
             to { opacity: 1; transform: scale(1); }
         }
+
+        .cupid-heart {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
         
-        /* Stile per il testo SVG centrale */
-        .svg-text {
+        .final-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             font-family: 'Pacifico', cursive;
-            font-size: 24px;
-            fill: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
-            pointer-events: none;
+            font-size: 2rem;
+            color: white;
+            text-align: center;
+            width: 80%;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            z-index: 20;
         }
 
     </style>
@@ -348,24 +351,18 @@
         }
 
 
-        // --- Logica Finale (Click su Sì) ---
+     // Logica Finale (Sì)
         const yesBtn = document.getElementById('yesBtn');
         const mainScreen = document.getElementById('main-screen');
         const endScreen = document.getElementById('end-screen');
 
         yesBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Evita di sparare un'altra freccia piccola
-            
-            // Suono finale trionfale (opzionale, riusa lo stesso per ora)
-             playSound();
-
-            // Nascondi la schermata principale e il cursore
+            e.stopPropagation(); // Evita di sparare un'altra freccia inutile
             mainScreen.style.display = 'none';
-            cursor.style.display = 'none';
-            document.body.style.cursor = 'default'; // Ripristina cursore normale se serve
-            
-            // Mostra la schermata finale
             endScreen.style.display = 'flex';
+            
+            // Spara fuochi d'artificio di cuori o una freccia finale
+            createArrow(window.innerWidth/2, window.innerHeight/2);
         });
 
     </script>

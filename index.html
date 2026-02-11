@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Una domanda importante...</title>
     <style>
-        /* --- FORZATURA TOTALE DEL CURSORE --- */
-        /* Questa regola applica il mirino a TUTTO, sovrascrivendo i default del browser */
-        * {
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="red" stroke-width="2"/><circle cx="16" cy="16" r="8" fill="none" stroke="red" stroke-width="2"/><line x1="16" y1="0" x2="16" y2="32" stroke="red" stroke-width="1"/><line x1="0" y1="16" x2="32" y2="16" stroke="red" stroke-width="1"/></svg>') 16 16, crosshair !important;
+        /* --- CURSORE: FORZATURA ESTREMA --- */
+        /* Definiamo il cursore come variabile per riutilizzarlo facilmente */
+        :root {
+            --cursor-url: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="red" stroke-width="2"/><circle cx="16" cy="16" r="8" fill="none" stroke="red" stroke-width="2"/><line x1="16" y1="0" x2="16" y2="32" stroke="red" stroke-width="1"/><line x1="0" y1="16" x2="32" y2="16" stroke="red" stroke-width="1"/></svg>');
+        }
+
+        /* Applichiamo il cursore a TUTTI gli elementi specifici possibili */
+        html, body, div, span, h1, button, svg, path, .heart-btn, #btn-yes, #btn-no, #btn-abstain {
+            cursor: var(--cursor-url) 16 16, crosshair !important;
         }
 
         /* --- Impostazioni Generali --- */
@@ -34,7 +39,6 @@
             pointer-events: none;
             z-index: -1;
         }
-
         .envelope-overlay::before,
         .envelope-overlay::after {
             content: '';
@@ -45,13 +49,11 @@
             background-color: rgba(255, 255, 255, 0.2);
             border-bottom: 2px solid #ff9eb5;
         }
-
         .envelope-overlay::before {
             left: 0;
             transform-origin: top left;
             transform: skewY(-20deg);
         }
-
         .envelope-overlay::after {
             right: 0;
             transform-origin: top right;
@@ -76,6 +78,7 @@
             font-size: 2.5rem;
             margin-bottom: 50px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            user-select: none; /* Impedisce la selezione del testo */
         }
 
         /* --- Area Pulsanti Centrali --- */
@@ -102,8 +105,6 @@
             height: 100px;
         }
 
-        /* Aggiungiamo un effetto ingrandimento al passaggio del mouse 
-           per far capire che è cliccabile dato che il cursore non cambia */
         .heart-btn:hover, #btn-abstain:hover {
             transform: scale(1.1);
         }
@@ -164,7 +165,7 @@
             transition: all 0.1s ease;
         }
 
-        /* --- Freccia d'oro (clic) --- */
+        /* --- Frecce d'oro (clic) --- */
         .golden-arrow {
             position: absolute;
             pointer-events: none;
@@ -190,12 +191,13 @@
             background-color: #ffc0cb;
             opacity: 0;
             transition: opacity 1s ease;
+            z-index: 200; /* Sopra a tutto */
         }
 
         .cupid-heart-container {
             position: relative;
-            width: 300px;
-            height: 300px;
+            width: 350px; /* Leggermente più grande */
+            height: 350px;
             animation: heartbeat 1.5s infinite;
         }
 
@@ -205,11 +207,11 @@
             left: 50%;
             transform: translate(-50%, -50%);
             color: white;
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: bold;
             text-align: center;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-            width: 80%;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+            width: 100%;
             z-index: 10;
         }
         
@@ -217,15 +219,20 @@
         .cupid-svg {
             width: 100%;
             height: 100%;
-            overflow: visible; /* Fondamentale per vedere la freccia lunga */
+            overflow: visible; /* Fondamentale */
         }
         .cupid-heart-path { fill: #e91e63; }
-        .cupid-arrow-path { 
-            fill: none; 
-            stroke: #ffd700; 
-            stroke-width: 10; 
-            stroke-linecap: round; 
-            filter: drop-shadow(3px 3px 2px rgba(0,0,0,0.3));
+        
+        /* Stile della freccia finale */
+        .cupid-arrow-shaft {
+            fill: none;
+            stroke: #ffd700;
+            stroke-width: 8;
+            stroke-linecap: square; /* Estremità piatte per evitare punte storte */
+        }
+        .cupid-arrow-head {
+            fill: #ffd700;
+            stroke: none;
         }
 
         @keyframes heartbeat {
@@ -269,7 +276,11 @@
              <svg class="cupid-svg" viewBox="0 0 100 100">
                 <path class="cupid-heart-path" d="M50 90 C 10 70, 0 40, 25 20 C 40 5, 50 20, 50 20 C 50 20, 60 5, 75 20 C 100 40, 90 70, 50 90 Z" />
                 
-                <path class="cupid-arrow-path" d="M -30 110 L 130 -10 M 115 -10 L 130 -10 L 125 5"/>
+                <line x1="-50" y1="130" x2="140" y2="-22" class="cupid-arrow-shaft" />
+                
+                <path class="cupid-arrow-head" d="M 140 -22 L 120 -15 L 128 0 Z" />
+                
+                <path class="cupid-arrow-shaft" d="M -50 130 L -60 128 M -50 130 L -45 145" stroke-width="4" />
             </svg>
             <div class="final-text">Ti Amo una Smita</div>
         </div>
@@ -286,7 +297,7 @@
 
         let isSwapped = false;
 
-        // Swap NO e SI
+        // Swap
         function swapButtons() {
             if (isSwapped) {
                 buttonsContainer.insertBefore(btnYes, btnNo);
@@ -310,9 +321,9 @@
             this.style.bottom = 'auto';
         });
 
-        // Spara freccia (Mirino)
+        // Click Mirino (Genera frecce)
         document.addEventListener('click', function(e) {
-            // Non spara se clicchi sui pulsanti o se è finito
+            // Evita di sparare se si clicca sui pulsanti o se siamo alla fine
             if (e.target.closest('button') || finalContainer.style.display === 'flex') return;
 
             const arrow = document.createElement('div');
@@ -324,10 +335,13 @@
             document.body.appendChild(arrow);
         });
 
-        // Logica Finale
+        // Finale
         btnYes.addEventListener('click', function() {
             mainContainer.style.opacity = '0';
+            
+            // Rimuove freccette sparse
             document.querySelectorAll('.golden-arrow').forEach(el => el.remove());
+
             setTimeout(() => {
                 mainContainer.style.display = 'none';
                 finalContainer.style.display = 'flex';

@@ -5,20 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Una domanda importante...</title>
     <style>
-        /* --- Impostazioni Generali e Cursore --- */
+        /* --- FORZATURA TOTALE DEL CURSORE --- */
+        /* Questa regola applica il mirino a TUTTO, sovrascrivendo i default del browser */
+        * {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="red" stroke-width="2"/><circle cx="16" cy="16" r="8" fill="none" stroke="red" stroke-width="2"/><line x1="16" y1="0" x2="16" y2="32" stroke="red" stroke-width="1"/><line x1="0" y1="16" x2="32" y2="16" stroke="red" stroke-width="1"/></svg>') 16 16, crosshair !important;
+        }
+
+        /* --- Impostazioni Generali --- */
         body {
             margin: 0;
             padding: 0;
-            background-color: #ffc0cb; /* Sfondo rosa */
+            background-color: #ffc0cb;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
             font-family: 'Arial', sans-serif;
-            /* Definizione del Cursore personalizzato a mirino */
-            /* L'immagine SVG è codificata direttamente nell'URL per evitare file esterni */
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="red" stroke-width="2"/><circle cx="16" cy="16" r="8" fill="none" stroke="red" stroke-width="2"/><line x1="16" y1="0" x2="16" y2="32" stroke="red" stroke-width="1"/><line x1="0" y1="16" x2="32" y2="16" stroke="red" stroke-width="1"/></svg>') 16 16, crosshair;
         }
 
         /* --- Effetto Busta da Lettera --- */
@@ -73,10 +76,9 @@
             font-size: 2.5rem;
             margin-bottom: 50px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-            cursor: inherit; /* Assicura che il testo non cambi il cursore */
         }
 
-        /* --- Area Pulsanti Centrali (Sì/No) --- */
+        /* --- Area Pulsanti Centrali --- */
         .buttons-container {
             display: flex;
             gap: 50px;
@@ -85,12 +87,9 @@
             height: 150px;
         }
 
-        /* MODIFICA 1: Stile base pulsanti - Cursore ereditato */
         .heart-btn {
             background: none;
             border: none;
-            /* cursor: pointer;  <- RIMOSSO */
-            cursor: inherit; /* <- AGGIUNTO: eredita il mirino dal body */
             transition: transform 0.2s;
             display: flex;
             flex-direction: column;
@@ -102,8 +101,14 @@
             width: 100px;
             height: 100px;
         }
+
+        /* Aggiungiamo un effetto ingrandimento al passaggio del mouse 
+           per far capire che è cliccabile dato che il cursore non cambia */
+        .heart-btn:hover, #btn-abstain:hover {
+            transform: scale(1.1);
+        }
         
-        /* CSS per il cuore intero (Sì) */
+        /* Cuore SÌ */
         .heart-shape {
             position: absolute;
             top: 0;
@@ -128,7 +133,7 @@
 
         #btn-yes span { z-index: 1; position: relative; top: 25px;}
 
-        /* Stile per il cuore spezzato (No) */
+        /* Cuore NO */
         #btn-no {
             width: 110px;
             height: 110px;
@@ -146,7 +151,7 @@
             color: white;
         }
 
-        /* --- Pulsante Astensione --- */
+        /* Pulsante Astengo */
         #btn-abstain {
             position: absolute;
             bottom: 30px;
@@ -156,12 +161,10 @@
             border: 2px solid #ccc;
             color: #333;
             border-radius: 8px;
-            /* cursor: pointer; <- RIMOSSO */
-            cursor: inherit; /* <- AGGIUNTO: eredita il mirino */
             transition: all 0.1s ease;
         }
 
-        /* --- Freccia d'oro al click --- */
+        /* --- Freccia d'oro (clic) --- */
         .golden-arrow {
             position: absolute;
             pointer-events: none;
@@ -173,7 +176,7 @@
             z-index: 100;
         }
 
-        /* --- Schermata Finale (Successo) --- */
+        /* --- Schermata Finale --- */
         #final-container {
             display: none;
             position: fixed;
@@ -187,7 +190,6 @@
             background-color: #ffc0cb;
             opacity: 0;
             transition: opacity 1s ease;
-            cursor: inherit; /* Anche la schermata finale mantiene il cursore */
         }
 
         .cupid-heart-container {
@@ -208,16 +210,23 @@
             text-align: center;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
             width: 80%;
+            z-index: 10;
         }
         
-        /* SVG per il cuore finale */
+        /* SVG Finale */
         .cupid-svg {
             width: 100%;
             height: 100%;
-            overflow: visible; /* Fondamentale per far vedere la freccia più lunga */
+            overflow: visible; /* Fondamentale per vedere la freccia lunga */
         }
         .cupid-heart-path { fill: #e91e63; }
-        .cupid-arrow-path { fill: none; stroke: #ffd700; stroke-width: 8; stroke-linecap: round; }
+        .cupid-arrow-path { 
+            fill: none; 
+            stroke: #ffd700; 
+            stroke-width: 10; 
+            stroke-linecap: round; 
+            filter: drop-shadow(3px 3px 2px rgba(0,0,0,0.3));
+        }
 
         @keyframes heartbeat {
             0% { transform: scale(1); }
@@ -226,11 +235,6 @@
             45% { transform: scale(1.1); }
             60% { transform: scale(1); }
             100% { transform: scale(1); }
-        }
-
-        /* Forza l'ereditarietà del cursore su tutti gli elementi cliccabili per sicurezza */
-        button, a {
-            cursor: inherit !important;
         }
 
     </style>
@@ -265,7 +269,7 @@
              <svg class="cupid-svg" viewBox="0 0 100 100">
                 <path class="cupid-heart-path" d="M50 90 C 10 70, 0 40, 25 20 C 40 5, 50 20, 50 20 C 50 20, 60 5, 75 20 C 100 40, 90 70, 50 90 Z" />
                 
-                <path class="cupid-arrow-path" d="M -10 100 L 110 0 M 100 -5 L 110 0 L 105 10"/>
+                <path class="cupid-arrow-path" d="M -30 110 L 130 -10 M 115 -10 L 130 -10 L 125 5"/>
             </svg>
             <div class="final-text">Ti Amo una Smita</div>
         </div>
@@ -282,7 +286,7 @@
 
         let isSwapped = false;
 
-        // --- Logica Pulsante NO (Inversione) ---
+        // Swap NO e SI
         function swapButtons() {
             if (isSwapped) {
                 buttonsContainer.insertBefore(btnYes, btnNo);
@@ -293,7 +297,7 @@
         }
         btnNo.addEventListener('mouseenter', swapButtons);
 
-        // --- Logica Pulsante MI ASTENGO (Fuga) ---
+        // Fuga Astengo
         btnAbstain.addEventListener('mouseenter', function() {
             const maxX = window.innerWidth - this.offsetWidth - 20;
             const maxY = window.innerHeight - this.offsetHeight - 20;
@@ -306,9 +310,10 @@
             this.style.bottom = 'auto';
         });
 
-        // --- Logica Click Freccia d'Oro (Mirino) ---
+        // Spara freccia (Mirino)
         document.addEventListener('click', function(e) {
-            if (e.target.closest('#btn-yes') || finalContainer.style.display === 'flex') return;
+            // Non spara se clicchi sui pulsanti o se è finito
+            if (e.target.closest('button') || finalContainer.style.display === 'flex') return;
 
             const arrow = document.createElement('div');
             arrow.classList.add('golden-arrow');
@@ -319,7 +324,7 @@
             document.body.appendChild(arrow);
         });
 
-        // --- Logica Finale (Click su SÌ) ---
+        // Logica Finale
         btnYes.addEventListener('click', function() {
             mainContainer.style.opacity = '0';
             document.querySelectorAll('.golden-arrow').forEach(el => el.remove());
@@ -331,7 +336,6 @@
                 }, 50);
             }, 500);
         });
-
     </script>
 </body>
 </html>

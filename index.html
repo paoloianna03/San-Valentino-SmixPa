@@ -149,6 +149,18 @@
             z-index: 100;
         }
 
+        /* --- Scritta "pippetta" --- */
+        .pippetta-label {
+            position: absolute;
+            color: #d32f2f;
+            font-weight: bold;
+            font-size: 1.1rem;
+            pointer-events: none;
+            z-index: 101;
+            text-shadow: 1px 1px 0px white;
+            white-space: nowrap;
+        }
+
         /* --- Schermata Finale --- */
         #final-container {
             display: none;
@@ -175,6 +187,16 @@
             text-align: center; text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
             width: 100%; z-index: 10;
         }
+
+        /* Scritta in basso nella schermata finale */
+        .final-subtext {
+            margin-top: 50px;
+            color: #c62828;
+            font-size: 1.2rem;
+            font-weight: bold;
+            opacity: 0.8;
+            animation: fadeInSub 2s ease forwards;
+        }
         
         .cupid-svg { width: 100%; height: 100%; overflow: visible; }
         .cupid-heart-path { fill: #e91e63; }
@@ -186,6 +208,11 @@
             45% { transform: scale(1.1); }
             60% { transform: scale(1); }
             100% { transform: scale(1); }
+        }
+
+        @keyframes fadeInSub {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 0.8; transform: translateY(0); }
         }
 
     </style>
@@ -235,6 +262,7 @@
             </svg>
             <div class="final-text">Ti Amo una Smita</div>
         </div>
+        <div class="final-subtext">(stronza)</div>
     </div>
 
     <script>
@@ -288,10 +316,13 @@
             this.style.bottom = 'auto';
         });
 
-        // Click Mirino
+        // Click Mirino (Genera freccia e scritta "pippetta")
         document.addEventListener('click', function(e) {
             if (e.target.closest('button') || finalContainer.style.display === 'flex') return;
+            
             playArrowSound();
+            
+            // Crea la freccia
             const arrow = document.createElement('div');
             arrow.classList.add('golden-arrow');
             arrow.style.left = (e.clientX - 30) + 'px';
@@ -299,11 +330,28 @@
             const randomAngle = (Math.random() * 60) - 30;
             arrow.style.transform = `rotate(${randomAngle}deg)`;
             document.body.appendChild(arrow);
+
+            // Crea la scritta "pippetta"
+            const label = document.createElement('div');
+            label.classList.add('pippetta-label');
+            label.innerText = 'pippetta';
+            // Posiziona la scritta leggermente sopra e a destra del click
+            label.style.left = (e.clientX + 10) + 'px';
+            label.style.top = (e.clientY - 25) + 'px';
+            document.body.appendChild(label);
+
+            // Rimuovi la scritta dopo 1 secondo
+            setTimeout(() => {
+                label.remove();
+            }, 1000);
         });
 
         btnYes.addEventListener('click', function() {
             mainContainer.style.opacity = '0';
+            // Rimuove frecce e scritte rimaste
             document.querySelectorAll('.golden-arrow').forEach(el => el.remove());
+            document.querySelectorAll('.pippetta-label').forEach(el => el.remove());
+            
             setTimeout(() => {
                 mainContainer.style.display = 'none';
                 finalContainer.style.display = 'flex';
